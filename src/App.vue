@@ -1,11 +1,10 @@
 <script setup>
-
+const date = new Date();
 </script>
 
 <template>
-  Привет {{ a }}
+  <div>{{ date }}</div>
 </template>
 
 <style scoped>
-
 </style>
