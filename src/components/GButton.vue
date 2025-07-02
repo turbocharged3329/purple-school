@@ -17,4 +17,8 @@
   color: var(--color-text-secondary) !important;
   border-radius: 100px;
 }
+
+.g-button:hover {
+  background-color: #006FCB;
+}
 </style>
