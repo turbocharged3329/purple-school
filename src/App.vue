@@ -1,10 +1,12 @@
-<script setup>
-const date = new Date();
-</script>
-
 <template>
-  <div>{{ date }}</div>
+  <main class="g-main-container">
+    <GButton>Начать игру</GButton>
+  </main>
 </template>
 
-<style scoped>
-</style>
+<script setup>
+import GButton from './components/GButton.vue';
+</script>
+
+
+<style scoped></style>
