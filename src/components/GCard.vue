@@ -1,5 +1,5 @@
 <template>
-    <div class="g-card" :class="{ 'g-card--flipped': !isFlipped }">
+    <div class="g-card" :class="{ 'g-card--flipped': isFlipped }">
         <div class="g-card-container">
             <!-- Лицевая сторона -->
             <div class="g-card-frontface">
@@ -9,7 +9,7 @@
 
                     <div class="g-card-footer">
                         <button type="button" class="g-card-footer__flip-button"
-                            @click="emit('flip')">Перевернуть</button>
+                            @click="onClickFlip">Перевернуть</button>
                     </div>
                 </div>
             </div>
@@ -39,7 +39,7 @@ import { computed, ref } from 'vue';
 import GIconReject from './icons/GIconReject.vue';
 import GIconAccept from './icons/GIconAccept.vue';
 
-const emit = defineEmits(['flip']);
+const emit = defineEmits(['flip', 'accept', 'reject']);
 
 const props = defineProps({
     number: {
@@ -60,6 +60,12 @@ const isFlipped = ref(false);
 const number = computed(() => {
     return props.number < 10 ? `0${props.number}` : props.number;
 })
+
+function onClickFlip() {
+    isFlipped.value = true
+    emit('flip')
+}
+
 </script>
 
 <style scoped>
