@@ -6,7 +6,7 @@
 </template>
 
 <script setup>
-import GIconHeart from './GIconHeart.vue';
+import GIconHeart from './icons/GIconHeart.vue';
 
 defineProps({
     modelValue: {

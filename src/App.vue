@@ -7,6 +7,8 @@
     </GHeader>
 
     <GButton>Начать игру</GButton>
+
+    <GCard />
   </main>
 </template>
 
@@ -14,6 +16,7 @@
 import GButton from './components/GButton.vue';
 import GHeader from './components/GHeader.vue';
 import GScore from './components/GScore.vue';
+import GCard from './components/GCard.vue';
 </script>
 
 
