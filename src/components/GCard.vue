@@ -4,8 +4,8 @@
             <!-- Лицевая сторона -->
             <div class="g-card-frontface">
                 <div class="g-card-wrapper">
-                    <div class="g-card__order">{{ number }}</div>
-                    <div class="g-card__title">{{ titleData.ru }}</div>
+                    <div class="g-card__order">{{ cardNumber }}</div>
+                    <div class="g-card__title">{{ data.word }}</div>
 
                     <div class="g-card-footer">
                         <button type="button" class="g-card-footer__flip-button"
@@ -17,8 +17,8 @@
             <!-- Обратная сторона -->
             <div class="g-card-backface">
                 <div class="g-card-wrapper">
-                    <div class="g-card__order">{{ number }}</div>
-                    <div class="g-card__title">{{ titleData.en }}</div>
+                    <div class="g-card__order">{{ cardNumber }}</div>
+                    <div class="g-card__title">{{ data.translation }}</div>
 
                     <div class="g-card-footer">
                         <button type="button" class="g-card-footer__action-button" @click="emit('accept')">
@@ -35,35 +35,29 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 import GIconReject from './icons/GIconReject.vue';
 import GIconAccept from './icons/GIconAccept.vue';
+import { CARD_STATE_OPENED_VALUE } from '../constants';
 
 const emit = defineEmits(['flip', 'accept', 'reject']);
 
 const props = defineProps({
-    number: {
-        type: Number,
-        default: 1
-    },
-    titleData: {
+    data: {
         type: Object,
-        default: () => ({
-            ru: 'Заголовок',
-            en: 'Title'
-        })
+        default: null
     }
 })
 
-const isFlipped = ref(false);
-
-const number = computed(() => {
-    return props.number < 10 ? `0${props.number}` : props.number;
+const cardNumber = computed(() => {
+    return props.data.id < 10 ? `0${props.data.id}` : props.data.id;
+})
+const isFlipped = computed(() => {
+    return props.data.state === CARD_STATE_OPENED_VALUE
 })
 
 function onClickFlip() {
-    isFlipped.value = true
-    emit('flip')
+    emit('flip', props.data.id)
 }
 
 </script>
