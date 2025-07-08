@@ -7,8 +7,9 @@
     </GHeader>
 
     <GButton>Начать игру</GButton>
-
-    <GCard :data="cards[0]" @flip="onCardFlip" />
+    <div class="g-cards-container">
+      <GCard v-for="card in cards" :key="card.id" :data="card" @flip="onCardFlip" />
+    </div>
   </main>
 </template>
 
@@ -18,7 +19,7 @@ import GButton from './components/GButton.vue';
 import GHeader from './components/GHeader.vue';
 import GScore from './components/GScore.vue';
 import GCard from './components/GCard.vue';
-import { CARD_STATE_CLOSED_VALUE, CARD_STATE_OPENED_VALUE, CARD_STATUS_PENDING_VALUE } from './constants';
+import { CARD_STATE_CLOSED_VALUE, CARD_STATE_OPENED_VALUE, CARD_STATUS_FAILED_VALUE, CARD_STATUS_PENDING_VALUE, CARD_STATUS_SUCCESS_VALUE } from './constants';
 
 const totalScore = ref(100);
 const cards = ref([
@@ -27,8 +28,22 @@ const cards = ref([
     word: 'apple',
     translation: 'яблоко',
     state: CARD_STATE_CLOSED_VALUE,
+    status: CARD_STATUS_SUCCESS_VALUE,
+  },
+  {
+    id: 2,
+    word: 'banana',
+    translation: 'банан',
+    state: CARD_STATE_CLOSED_VALUE,
+    status: CARD_STATUS_FAILED_VALUE,
+  },
+  {
+    id: 3,
+    word: 'orange',
+    translation: 'апельсин',
+    state: CARD_STATE_CLOSED_VALUE,
     status: CARD_STATUS_PENDING_VALUE,
-  }
+  },
 ])
 
 function onCardFlip(cardId) {

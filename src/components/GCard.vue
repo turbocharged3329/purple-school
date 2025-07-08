@@ -18,15 +18,25 @@
             <div class="g-card-backface">
                 <div class="g-card-wrapper">
                     <div class="g-card__order">{{ cardNumber }}</div>
+                    <template v-if="data.status !== CARD_STATUS_PENDING_VALUE">
+                        <div class="g-card__status">
+                            <GIconAcceptBigger v-if="data.status === CARD_STATUS_SUCCESS_VALUE" />
+                            <GIconRejectBigger v-else />
+                        </div>
+                    </template>
                     <div class="g-card__title">{{ data.translation }}</div>
 
                     <div class="g-card-footer">
-                        <button type="button" class="g-card-footer__action-button" @click="emit('accept')">
-                            <GIconAccept size="24" />
-                        </button>
-                        <button type="button" class="g-card-footer__action-button" @click="emit('reject')">
-                            <GIconReject size="24" />
-                        </button>
+                        <template v-if="data.status === CARD_STATUS_PENDING_VALUE">
+                            <button type="button" class="g-card-footer__action-button" @click="emit('accept')">
+                                <GIconAccept />
+                            </button>
+                            <button type="button" class="g-card-footer__action-button" @click="emit('reject')">
+                                <GIconReject />
+                            </button>
+                        </template>
+
+                        <p class="g-card-footer__complete-label" v-else>Завершено</p>
                     </div>
                 </div>
             </div>
@@ -38,7 +48,9 @@
 import { computed } from 'vue';
 import GIconReject from './icons/GIconReject.vue';
 import GIconAccept from './icons/GIconAccept.vue';
-import { CARD_STATE_OPENED_VALUE } from '../constants';
+import GIconAcceptBigger from './icons/GIconAcceptBigger.vue';
+import GIconRejectBigger from './icons/GIconRejectBigger.vue';
+import { CARD_STATE_OPENED_VALUE, CARD_STATUS_SUCCESS_VALUE, CARD_STATUS_PENDING_VALUE } from '../constants';
 
 const emit = defineEmits(['flip', 'accept', 'reject']);
 
@@ -124,6 +136,14 @@ function onClickFlip() {
     z-index: 2;
 }
 
+.g-card__status {
+    position: absolute;
+    top: -1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+}
+
 .g-card__title {
     color: var(--color-text-primary);
     font-weight: 400;
@@ -158,14 +178,23 @@ function onClickFlip() {
 
 .g-card-footer__flip-button {
     font-size: .875rem;
-    font-weight: 400;
     line-height: 1.125rem;
-    /* 18px */
     color: var(--color-text-primary);
     letter-spacing: .15rem;
     text-transform: uppercase;
     font-weight: 700;
     background-color: var(--color-bg-white);
+}
+
+.g-card-footer__complete-label {
+    font-size: .875rem;
+    font-weight: 400;
+    line-height: 1.125rem;
+    color: var(--color-text-primary);
+    letter-spacing: .15rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin: 0 !important;
 }
 
 .g-card.g-card--flipped .g-card-container {
