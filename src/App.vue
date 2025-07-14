@@ -6,10 +6,18 @@
       </template>
     </GHeader>
 
-    <GButton>Начать игру</GButton>
-    <div class="g-cards-container" v-if="cards?.length > 0">
-      <GCard v-for="card in cards" :key="card.id" :data="card" @flip="onCardFlip" />
+    <GButton class="g-start-game-button" v-if="!isGameStarted" @click="onStartGame">Начать игру</GButton>
+
+    <template v-else>
+      <template v-if="cards?.length">
+    <div class="g-cards-container" >
+      <GCard v-for="card in cards" :key="card.id" :data="card" @flip="onCardFlip" @accept="onCardAccept(card.id)" @reject="onCardReject(card.id)  " />
     </div>
+  </template>
+  </template>
+  <div class="g-footer">
+  <GButton v-if="isGameStarted && cards?.length" @click="onRestartGame">Начать заново</GButton>
+</div>
   </main>
 </template>
 
@@ -19,14 +27,19 @@ import GButton from './components/GButton.vue';
 import GHeader from './components/GHeader.vue';
 import GScore from './components/GScore.vue';
 import GCard from './components/GCard.vue';
-import { CARD_STATE_CLOSED_VALUE, CARD_STATE_OPENED_VALUE, CARD_STATUS_FAILED_VALUE, CARD_STATUS_PENDING_VALUE, CARD_STATUS_SUCCESS_VALUE } from './constants';
+import { CARD_STATE_CLOSED_VALUE, CARD_STATE_OPENED_VALUE, CARD_STATUS_PENDING_VALUE, CARD_STATUS_SUCCESS_VALUE, CARD_STATUS_FAILED_VALUE } from './constants';
 
+const isGameStarted = ref(false)
 const totalScore = ref(100);
 const cards = ref(null)
 
 onMounted(() => {
   getCardsDataFromApi()
 })
+
+function onStartGame() {
+  isGameStarted.value = true
+}
 
 async function getCardsDataFromApi() {
   try {
@@ -52,6 +65,26 @@ function onCardFlip(cardId) {
   const card = cards.value.find(card => card.id === cardId)
   card.state = CARD_STATE_OPENED_VALUE
 }
+
+function onCardAccept(cardId) {
+  const card = cards.value.find(card => card.id === cardId)
+  card.status = CARD_STATUS_SUCCESS_VALUE
+  totalScore.value += 10
+}
+
+function onCardReject(cardId) {
+  const card = cards.value.find(card => card.id === cardId)
+  card.status = CARD_STATUS_FAILED_VALUE
+  totalScore.value -= 4
+}
+
+function onRestartGame() {
+  getCardsDataFromApi()
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  })
+}
 </script>
 
 
@@ -60,6 +93,21 @@ function onCardFlip(cardId) {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   row-gap: 4.125rem;
-  justify-items: center;
+  padding: 0 4.125rem;
+  min-height: 100vh;
+  position: relative;
+}
+
+.g-start-game-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.g-footer {
+  display: flex;
+  justify-content: center;
+  padding: 4.125rem 0;
 }
 </style>

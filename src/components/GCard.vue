@@ -28,10 +28,10 @@
 
                     <div class="g-card-footer">
                         <template v-if="data.status === CARD_STATUS_PENDING_VALUE">
-                            <button type="button" class="g-card-footer__action-button" @click="emit('accept')">
+                            <button type="button" class="g-card-footer__action-button" @click="onCardAccept">
                                 <GIconAccept />
                             </button>
-                            <button type="button" class="g-card-footer__action-button" @click="emit('reject')">
+                            <button type="button" class="g-card-footer__action-button" @click="onCardReject">
                                 <GIconReject />
                             </button>
                         </template>
@@ -70,6 +70,14 @@ const isFlipped = computed(() => {
 
 function onClickFlip() {
     emit('flip', props.data.id)
+}
+
+function onCardAccept() {
+    emit('accept', props.data.id)    
+}
+
+function onCardReject() {
+    emit('reject', props.data.id)
 }
 
 </script>
@@ -119,6 +127,10 @@ function onClickFlip() {
     backface-visibility: hidden;
     padding: 1.75rem 1.1875rem;
     box-sizing: border-box;
+}
+
+.g-card-frontface {
+    backface-visibility: hidden;
 }
 
 .g-card-backface {
@@ -174,6 +186,7 @@ function onClickFlip() {
     align-items: center;
     justify-content: center;
     padding: 0 !important;
+    cursor: pointer;
 }
 
 .g-card-footer__flip-button {
@@ -184,6 +197,7 @@ function onClickFlip() {
     text-transform: uppercase;
     font-weight: 700;
     background-color: var(--color-bg-white);
+    cursor: pointer;
 }
 
 .g-card-footer__complete-label {
@@ -199,5 +213,22 @@ function onClickFlip() {
 
 .g-card.g-card--flipped .g-card-container {
     transform: rotateY(180deg);
+}
+
+/* Управление pointer-events для обеспечения кликабельности */
+.g-card-frontface {
+    pointer-events: auto;
+}
+
+.g-card-backface {
+    pointer-events: none;
+}
+
+.g-card.g-card--flipped .g-card-frontface {
+    pointer-events: none;
+}
+
+.g-card.g-card--flipped .g-card-backface {
+    pointer-events: auto;
 }
 </style>
